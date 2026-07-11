@@ -1,0 +1,313 @@
+/* ==========================================================================
+   1. GLOBAL STYLES & DARK THEME
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0a0a0a; /* Fondo ultra oscuro tipo Netflix */
+    color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ==========================================================================
+   2. IPHONE-LIKE INTRO SCREEN
+   ========================================================================== */
+#intro-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Asegura que tape todo al inicio */
+    animation: fadeOut 0.5s ease-in-out forwards;
+    animation-delay: 2.5s; /* Duración de la pantalla de bienvenida */
+    pointer-events: none; /* Permite hacer clic a través de ella cuando desaparece */
+}
+
+.intro-text {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: -0.5px;
+    opacity: 0;
+    animation: fadeInText 1s ease-in-out forwards;
+    animation-delay: 0.5s;
+}
+
+/* Intro Animations */
+@keyframes fadeInText {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; visibility: hidden; }
+}
+
+/* ==========================================================================
+   3. HEADER STYLES
+   ========================================================================== */
+header {
+    text-align: center;
+    padding: 60px 20px 40px 20px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+}
+
+header p {
+    color: #666666;
+    font-size: 1.1rem;
+}
+
+/* ==========================================================================
+   4. AUTOMATIC MASONRY GALLERY (MANICURED BY JAVASCRIPT)
+   ========================================================================== */
+.grid {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px 100px 20px;
+}
+
+/* El contenedor de cada video */
+.grid-item {
+    width: 31%; /* Para pantallas grandes */
+    background-color: #141414;
+    margin-bottom: 24px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 16 / 9;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.grid-item.grid-item--vertical {
+    aspect-ratio: 9 / 16;
+}
+
+.item-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.grid-item:hover {
+    transform: scale(1.04);
+    z-index: 10;
+}
+
+.play-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.play-button-icon {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.play-button-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    border-style: solid;
+    border-width: 10px 0 10px 16px;
+    border-color: transparent transparent transparent #000000;
+}
+
+.grid-item:hover .play-overlay {
+    opacity: 1;
+}
+
+.project-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 40px 20px 20px 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.project-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.project-category {
+    font-size: 0.85rem;
+    color: #aaaaaa;
+}
+
+.grid-item:hover .project-info {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   5. FLOATING CONTACT BUTTONS
+   ========================================================================== */
+.floating-contact {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 100;
+}
+
+.contact-btn {
+    background-color: #ffffff;
+    color: #000000;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+    transition: transform 0.2s ease;
+}
+
+/* ==========================================================================
+   6. LIGHTBOX MODAL (CINEMATIC OVERLAY - RESPONSIVE)
+   ========================================================================== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.98);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    width: 90%; /* Más ancho en móviles para darle espacio a los controles */
+    max-width: 1000px;
+    aspect-ratio: 16 / 9;
+    position: relative;
+}
+
+/* Variación vertical en modal */
+.modal.modal--vertical .modal-content {
+    width: auto;
+    height: 80vh;
+    aspect-ratio: 9 / 16;
+}
+
+#modal-iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    border: none;
+    background-color: #000000;
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    color: #ffffff;
+    font-size: 40px;
+    font-weight: 200;
+    cursor: pointer;
+    z-index: 10001;
+}
+
+/* RESPONSIVE BREAKPOINT FOR MOBILE (CONSOLIDADO) */
+@media (max-width: 768px) {
+    /* 1. Corrección del encabezado de bienvenida */
+    header {
+        padding: 60px 24px 30px 24px !important;
+        text-align: center !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    header h1 {
+        font-size: 2rem !important; /* Más chico para que no se rompa de lado */
+        text-align: center !important;
+        line-height: 1.2 !important;
+        margin: 0 auto 12px auto !important;
+        width: 100% !important;
+    }
+
+    header p {
+        font-size: 1rem !important;
+        text-align: center !important;
+        line-height: 1.5 !important;
+        margin: 0 auto !important;
+        width: 100% !important;
+        color: #aaaaaa !important;
+    }
+
+    /* 2. Ajustes de la galería en móvil */
+    .grid {
+        padding: 0 15px 100px 15px;
+    }
+    
+    .grid-item {
+        width: 100% !important; /* Fuerza una sola columna */
+        left: 0 !important; /* Quita desborde de Masonry */
+        margin-bottom: 20px;
+    }
+
+    /* 3. Ajustes del Modal en móvil */
+    .modal-content {
+        width: 95%;
+    }
+    
+    .modal.modal--vertical .modal-content {
+        width: auto;
+        height: 75vh;
+        aspect-ratio: 9 / 16;
+    }
+    
+    .close-modal {
+        top: 15px;
+        right: 20px;
+    }
+}
